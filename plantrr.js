@@ -20,17 +20,19 @@ Module.register("plantrr",{
 		var video = document.createElement("video");
 		if (Hls.isSupported()) {
 			var hls = new Hls();
-			//bind them together
+			hls.loadSource("https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8");
 			hls.attachMedia(video);
-			//MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
-			hls.on(Hls.Events.MEDIA_ATTACHED, function() {
-				console.log("video and hls.js are now bound together!");
-				hls.loadSource(this.config.url);
-				hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
-					console.log(`manifest loaded, found ${data.levels.length} quality level`);
-				});
+			hls.on(Hls.Events.MANIFEST_PARSED,function() {
+				video.play();
+			})
+		}
+		else if(video.canPlayType("application/vnd.apple.mpegurl")) {
+			video.src = "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
+			video.addEventListener("loadedmetadata", function() {
+				video.play();
 			});
 		}
+		video.play();
 		return video;
 	}
 
