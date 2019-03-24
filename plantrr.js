@@ -13,24 +13,24 @@ Module.register("plantrr",{
 	},
 	// Define required scripts.
 	getScripts: function() {
-		return ["hls.js"];
+		return ["https://cdn.jsdelivr.net/npm/hls.js"];
 	},
 	getDom: function() {
 		var { width, height } = this.config;
 		var video = document.createElement("video");
-		// if (Hls.isSupported()) {
-		// 	var hls = new Hls();
-		// 	//bind them together
-		// 	hls.attachMedia(video);
-		// 	//MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
-		// 	hls.on(Hls.Events.MEDIA_ATTACHED, function() {
-		// 		console.log("video and hls.js are now bound together!");
-		// 		hls.loadSource(this.config.url);
-		// 		hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
-		// 			console.log(`manifest loaded, found ${data.levels.length} quality level`);
-		// 		});
-		// 	});
-		// }
+		if (Hls.isSupported()) {
+			var hls = new Hls();
+			//bind them together
+			hls.attachMedia(video);
+			//MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
+			hls.on(Hls.Events.MEDIA_ATTACHED, function() {
+				console.log("video and hls.js are now bound together!");
+				hls.loadSource(this.config.url);
+				hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+					console.log(`manifest loaded, found ${data.levels.length} quality level`);
+				});
+			});
+		}
 		return video;
 	}
 
