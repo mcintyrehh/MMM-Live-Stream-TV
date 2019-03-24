@@ -1,0 +1,22 @@
+{
+  "name": "plantrr",
+  "version": "1.0.0",
+  "description": "HLS live streams for Magic Mirror^2",
+  "main": "plantrr.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcintyrehh/plantrr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcintyrehh/plantrr/issues"
+  },
+  "homepage": "https://github.com/mcintyrehh/plantrr#readme",
+  "dependencies": {
+    "hls.js": "^0.12.4"
+  }
+}
