@@ -5,6 +5,7 @@ Module.register("plantrr",{
 		// url: "http://iphone-streaming.ustream.tv/uhls/1524/streams/live/iphone/playlist.m3u8",
 		url: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w2084964165.m3u8",
 		scrolling: "no",
+		currentChannel: 0,
 		streams: [
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w2084964165.m3u8",
@@ -59,8 +60,18 @@ Module.register("plantrr",{
 		// this lo
 		return ["https://cdn.jsdelivr.net/npm/hls.js"];
 	},
-	socketNotificationReceived: function(notification, payload) {
-		Log.log(this.name + " received a socket notification: " + notification + " - Payload: " + payload);
+	// Received notifications from ArduPort, which sends Arduino Serial value
+	notificationReceived: function(notification, payload, sender) {
+		// if it has a sender it isn't a system notification
+		if (sender) {
+			Log.log(payload[0].value)
+			// sets current channel to the value that the Arduino Serial is putting out
+			this.config.currentChannel = parseInt(payload[0].value, 10);
+			this.updateDom();
+		}
+		else {
+			Log.log("received a system notification")
+		}
 	},
 	getDom: function() {
 		var { width, height } = this.config;
@@ -68,7 +79,7 @@ Module.register("plantrr",{
 		video.width = this.config.frameWidth;
 		if (Hls.isSupported()) {
 			var hls = new Hls();
-			hls.loadSource(this.config.streams[6].url);
+			hls.loadSource(this.config.streams[this.config.currentChannel].url);
 			hls.attachMedia(video);
 			hls.on(Hls.Events.MANIFEST_PARSED,function() {
 				video.play();
