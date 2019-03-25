@@ -64,15 +64,19 @@ Module.register("plantrr",{
 	},
 	// Received notifications from ArduPort, which sends Arduino Serial value
 	notificationReceived: function(notification, payload, sender) {
-		console.log(this.hls);
 		// if it has a sender it isn't a system notification
 		if (sender) {
-			if (parseInt(payload[0].value,10) !== this.config.currentChannel) {
+			Log.log(`${this.name} received a module notification: ${notification} from sender: ${sender.name}`);
+			if (parseInt(payload[0].value) {
 				Log.log(payload[0].value)
-			}
+			} else {
+				Log.log("not loaded yet")
+			};
 			// sets current channel to the value that the Arduino Serial is putting out
 			//this.config.currentChannel = parseInt(payload[0].value, 10);
 			//this.updateDom();
+		} else {
+			Log.log(`${this.name} received a system notification: ${notification}`)
 		}
 	},
 	destroyHLS: function() {
@@ -89,11 +93,11 @@ Module.register("plantrr",{
 			hls.loadSource(this.config.streams[this.config.currentChannel].url);
 			hls.attachMedia(video);
 			hls.on(Hls.Events.MANIFEST_PARSED,function() {
-				video.play();how 
+				video.play();
 			})
 		}
 		else if(video.canPlayType("application/vnd.apple.mpegurl")) {
-			video.src = "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
+			video.src = this.config.url;
 			video.addEventListener("loadedmetadata", function() {
 				video.play();
 			});
