@@ -59,12 +59,8 @@ Module.register("plantrr",{
 		// this lo
 		return ["https://cdn.jsdelivr.net/npm/hls.js"];
 	},
-	notificationReceived: function(notification, payload, sender) {
-		if (sender) {
-			Log.log(this.name + " received a module notification: " + notification + " from sender: " + sender.name);
-		} else {
-			Log.log(this.name + " received a system notification: " + notification);
-		}
+	socketNotificationReceived: function(notification, payload) {
+		Log.log(this.name + " received a socket notification: " + notification + " - Payload: " + payload);
 	},
 	getDom: function() {
 		var { width, height } = this.config;
