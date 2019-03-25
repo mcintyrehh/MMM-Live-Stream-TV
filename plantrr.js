@@ -56,7 +56,15 @@ Module.register("plantrr",{
 	},
 	// Define required scripts.
 	getScripts: function() {
+		// this lo
 		return ["https://cdn.jsdelivr.net/npm/hls.js"];
+	},
+	notificationReceived: function(notification, payload, sender) {
+		if (sender) {
+			Log.log(this.name + " received a module notification: " + notification + " from sender: " + sender.name);
+		} else {
+			Log.log(this.name + " received a system notification: " + notification);
+		}
 	},
 	getDom: function() {
 		var { width, height } = this.config;
