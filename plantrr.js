@@ -8,45 +8,56 @@ Module.register("plantrr",{
 		hls: null,
 		currentChannel: 0,
 		streams: [
-			{
-				url: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w2084964165.m3u8",
-				name: "times-square"
-			},
+
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w1570249403.m3u8",
-				name: "empire-state-building"
+				name: "Empire State Building",
+				channelNumber: 0,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/13900.flv/chunklist_w1596516954.m3u8",
-				name: "empire-state-building-south"
+				name: "ESB View (South)",
+				channelNumber: 1,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/10874.flv/chunklist_w1710102470.m3u8",
-				name: "world-trade-center"
+				name: "World Trade Center",
+				channelNumber: 2,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/chargingbull.flv/chunklist_w924600150.m3u8",
-				name: "wall-street-bull"
+				name: "Wall Street Bull",
+				channelNumber: 3,
+			},
+						{
+				url: "https://videos3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w1219632180.m3u8",
+				name: "Times Square",
+				channelNumber: 4,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/4017timessquare.flv/chunklist_w2099074996.m3u8",
-				name: "times-square-south"
+				name: "Times Square View (South)",
+				channelNumber: 5,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/485.flv/chunklist_w1369316787.m3u8",
-				name: "times-square-north"
+				name: "Times Square View (North)",
+				channelNumber: 6,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w212315235.m3u8",
-				name: "times-square-street"
+				name: "Times Square Street Cam",
+				channelNumber: 7,
 			},
 			{
 				url: "https://videos3.earthcam.com/fecnetwork/15559.flv/chunklist_w1260148854.m3u8",
-				name: "times-square-crossroads"
+				name: "Times Square Crossroads",
+				channelNumber: 8,
 			},
 			{
-				url: "https://videos3.earthcam.com/fecnetwork/7384.flv/chunklist_w1375826723.m3u8",
-				name: "high-line"
+				url: "https://videos3.earthcam.com/fecnetwork/13903.flv/chunklist_w980148749.m3u8",
+				name: "Midtown Skyline",
+				channelNumber: 9,
 			}
 		]
 	},
@@ -91,9 +102,14 @@ Module.register("plantrr",{
 		var { width, height } = this.config;
 		var video = document.createElement("video");
 		wrapper.appendChild(video);
+		//creating the divs for info below the video
 		var textDiv = document.createElement("div");
-		textDiv.className=("channel-div");
-		textDiv.innerHTML = `Channel ${this.config.currentChannel}`;
+		var info = `
+			<span class="channel-div">Channel ${this.config.currentChannel}</span>
+			<span> | </span>
+			<span class="channel-name"> ${this.config.stream[this.config.currentChannel].name}</span>
+			`
+		textDiv.innerHTML = info;		
 		wrapper.appendChild(textDiv);
 		video.width = this.config.frameWidth;
 		if (Hls.isSupported()) {
