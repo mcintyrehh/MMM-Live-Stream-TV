@@ -67,8 +67,11 @@ Module.register("plantrr",{
 		// if it has a sender it isn't a system notification
 		if (sender) {
 			Log.log(`${this.name} received a module notification: ${notification} from sender: ${sender.name}`);
-			if (parseInt(payload[0].value) {
-				Log.log(payload[0].value)
+			if (newChannel != this.config.currentChannel) {
+				var newChannel = parseInt(payload[0].value);
+				Log.log(newChannel);
+				this.config.currentChannel = newChannel;
+				this.destroyHLS();
 			} else {
 				Log.log("not loaded yet")
 			};
@@ -84,8 +87,14 @@ Module.register("plantrr",{
 		this.updateDom();
 	},
 	getDom: function(destroy) {
+		var wrapper = document.createElement("div");
 		var { width, height } = this.config;
 		var video = document.createElement("video");
+		wrapper.appendChild(video);
+		var textDiv = document.createElement("div");
+		textDiv.className=("channel-div");
+		textDiv.innerHTML = `Channel ${this.config.currentChannel}`;
+		wrapper.appendChild(textDiv);
 		video.width = this.config.frameWidth;
 		if (Hls.isSupported()) {
 			var hls = new Hls();
@@ -103,6 +112,6 @@ Module.register("plantrr",{
 			});
 		}
 		video.play();
-		return video;
+		return wrapper;
 	}
 });
