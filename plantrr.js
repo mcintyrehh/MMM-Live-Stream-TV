@@ -81,14 +81,12 @@ Module.register("plantrr",{
 			if (newChannel != this.config.currentChannel) {
 				var newChannel = parseInt(payload[0].value);
 				Log.log(newChannel);
+				// sets current channel to the value that the Arduino Serial is sending out
 				this.config.currentChannel = newChannel;
 				this.destroyHLS();
 			} else {
 				Log.log("not loaded yet")
 			};
-			// sets current channel to the value that the Arduino Serial is putting out
-			//this.config.currentChannel = parseInt(payload[0].value, 10);
-			//this.updateDom();
 		} else {
 			Log.log(`${this.name} received a system notification: ${notification}`)
 		}
@@ -102,15 +100,16 @@ Module.register("plantrr",{
 		var { width, height } = this.config;
 		var video = document.createElement("video");
 		wrapper.appendChild(video);
-		//creating the divs for info below the video
-		var textDiv = document.createElement("div");
-		var info = `
-			<span class="channel-div">Channel ${this.config.currentChannel}</span>
-			<span> | </span>
-			<span class="channel-name"> ${this.config.stream[this.config.currentChannel].name}</span>
-			`
-		textDiv.innerHTML = info;		
-		wrapper.appendChild(textDiv);
+		// creating info divs below the video
+		var videoInfo = document.createElement("div");
+		var channelNumber = document.createElement("span");
+		channelNumber.className=("channel-div");
+		channelNumber.innerHTML = `Channel ${this.config.currentChannel}`;
+		videoInfo.appendChild(channelNumber);
+		var videoName = document.createElement("span");
+		videoName.innerHTML = ` - ${this.config.streams[this.config.currentChannel].name}`
+		videoInfo.appendChild(videoName);
+		wrapper.appendChild(videoInfo);
 		video.width = this.config.frameWidth;
 		if (Hls.isSupported()) {
 			var hls = new Hls();
