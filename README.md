@@ -1,2 +1,46 @@
 # MMM-Live-Stream-TV
 MagicMirror² Module (MMM) for displaying live feeds on your mirror
+
+## Installation
+
+In your terminal, go to your MagicMirror's Module folder:
+
+```bash
+cd ~/MagicMirror/modules
+```
+Clone this repository:
+```bash
+git clone https://github.com/mcintyrehh/MMM-Live-Stream-TV.git
+```
+Configure the module in your config.js file.
+
+
+## Using the module
+
+To use this module, add it to the modules array in your config.js file.
+
+```js
+modules: [
+   {
+      module: 'MMM-Live-Stream-TV',
+      position: 'bottom_center',
+      config: {
+        portname: "/dev/ttyACM0",
+        style: "tv",  // Options: tv, slideshow, static
+        sensors: [
+          {
+            name: "PTNM",
+            description: "Potentiometer Value",
+          }
+        ]
+      },
+   }
+]
+```
+
+## Configuration Options
+
+Option|Description
+------|-----------
+`portname`|The name/location of the port your Arduino is connected to<br/>**Expected Value type:** `Windows will be COM#, RasPi will be something like /dev/ttyACM#`
+`style`|Which display method you want<br/>**Expected Value type:** `"tv", "slideshow", "static"`
