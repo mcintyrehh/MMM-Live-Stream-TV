@@ -6,6 +6,7 @@ Module.register("MMM-Live-Stream-TV",{
 		updateInterval: 1, //second
 		animationSpeed: 1000,
 		displayIcons: true,
+		useColors: false,
 		iconSize: "small",
 		labelSize: "medium",
 		showDescription: false,
@@ -15,6 +16,10 @@ Module.register("MMM-Live-Stream-TV",{
 		url: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w2084964165.m3u8",
 		scrolling: "no",
 		currentChannel: 0,
+		sensor: {
+			description: null,
+			error: null,
+		},
 		streams: [
 
 			{
@@ -143,7 +148,7 @@ Module.register("MMM-Live-Stream-TV",{
 			if(payload.name == "initialized"){
 				this.loading = false;
 			}
-			self.updateDom(self.config.animationSpeed);
+			// self.updateDom(self.config.animationSpeed);
 			break;
 
 		case "sensor":
@@ -153,8 +158,14 @@ Module.register("MMM-Live-Stream-TV",{
 
 				this.message = null;
 				this.config.sensors = payload;
-
-				self.updateDom(self.config.animationSpeed);
+				console.log(`${this.name} received a module notification: ${notification}`)
+				console.log(payload);
+				var newChannel = parseInt(payload[0].value);
+				Log.log(newChannel + "NEW CHANNEL");
+				console.log(newChannel);
+				// sets current channel to the value that the Arduino Serial is sending out
+				this.config.currentChannel = newChannel;
+				this.updateDom(self.config.animationSpeed);
 			}
 			break;
 
@@ -171,29 +182,10 @@ Module.register("MMM-Live-Stream-TV",{
 			break;
 		}
 	},
-	// Received notifications from ArduPort, which sends Arduino Serial value
-	notificationReceived: function(notification, payload, sender) {
-		// if it has a sender it isn't a system notification
-		if (sender) {
-			Log.log(`${this.name} received a module notification: ${notification} from sender: ${sender.name}`);
-			if (newChannel != this.config.currentChannel) {
-				var newChannel = parseInt(payload[0].value);
-				Log.log(newChannel);
-				// sets current channel to the value that the Arduino Serial is sending out
-				this.config.currentChannel = newChannel;
-				this.destroyHLS();
-			} else {
-				Log.log("not loaded yet")
-			};
-		} else {
-			Log.log(`${this.name} received a system notification: ${notification}`)
-		}
-	},
-	destroyHLS: function() {
-		this.hls.destroy();
-		this.updateDom();
-	},
-	getDom: function(destroy) {
+	getDom: function() {
+		if(this.hls) {
+			this.hls.destroy();
+		};
 		var wrapper = document.createElement("div");
 		var { width, height } = this.config;
 		var video = document.createElement("video");
