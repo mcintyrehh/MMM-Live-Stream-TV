@@ -3,6 +3,7 @@ Module.register("MMM-Live-Stream-TV",{
 
 	defaults: {
 		portname: "COM7",
+		style: "tv",
 		updateInterval: 1, //second
 		animationSpeed: 1000,
 		displayIcons: true,
@@ -79,21 +80,23 @@ Module.register("MMM-Live-Stream-TV",{
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
 		// initializing hls variable to be referenced when creating/destroying streams
-		this.hls = "";
-		// initializing status booleans
-		this.loading = true;
-		this.isArduinoStarting = false;
-		this.isArduinoStarted = false;
-		this.isArduinoConnected = false;
-		// sends the configuration details to node_helper
-		console.log(this.config);
-		self.log(this.config);
-		this.sendSocketNotification("CONFIG", this.config);
-		// sends a notification to node_helper to intialize the python shell
-		this.sendSocketNotification("INITIALIZE", null);
+		if(this.config.style === "tv") {
+			this.hls = "";
+			// initializing status booleans
+			this.loading = true;
+			this.isArduinoStarting = false;
+			this.isArduinoStarted = false;
+			this.isArduinoConnected = false;
+			// sends the configuration details to node_helper
+			console.log(this.config);
+			self.log(this.config);
+			this.sendSocketNotification("CONFIG", this.config);
+			// sends a notification to node_helper to intialize the python shell
+			this.sendSocketNotification("INITIALIZE", null);
+			self.log(("[MMM-Live-Stream-TV::START()]: data: " + JSON.stringify(self.data, null, 4)), "dev");
+			self.log(("[MMM-Live-Stream-TV::START()]: config: " + JSON.stringify(self.config, null, 4)), "dev");
+		}
 
-		self.log(("[MMM-Live-Stream-TV::START()]: data: " + JSON.stringify(self.data, null, 4)), "dev");
-		self.log(("[MMM-Live-Stream-TV::START()]: config: " + JSON.stringify(self.config, null, 4)), "dev");
 	},
 	getTranslations: function() {
 		return {
