@@ -1,5 +1,10 @@
 # MMM-Live-Stream-TV
-MagicMirror² Module (MMM) for displaying live feeds on your mirror
+MagicMirror² Module (MMM) for displaying HLS live feeds on your mirror
+
+...BUT WAIT!! Theres more!
+
+Now with Arduino powered channel changing! Clone this repo today and get two arduino sketches for changing the channel with either a potentiometer OR a 10 switch rotary encoder!
+
 ![Example Screenshot](./Screenshots/Screenshot.png)
 ## Installation
 
