@@ -1,6 +1,6 @@
 # MMM-Live-Stream-TV
 MagicMirror² Module (MMM) for displaying live feeds on your mirror
-
+![Example Screenshot](./Screenshots/Screenshot.png)
 ## Installation
 
 In your terminal, go to your MagicMirror's Module folder:
