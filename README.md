@@ -19,6 +19,19 @@ git clone https://github.com/mcintyrehh/MMM-Live-Stream-TV.git
 ```
 Configure the module in your config.js file.
 
+## Setting up the Arduino
+
+Plug in your arduino and figure out what port it is connected to with the following command:
+
+```bash
+ls ~/dev/tty*
+```
+
+The serial port should be '/dev/ttyACM0', but it could have a different name.  If you aren't sure, unplug the arduino run the command again and see which one dissapears.
+
+Schematic Diagram/Hardware Connection
+
+![Schematic Diagram/Hardware Connection Image](./Screenshots/Schematics.png)
 
 ## Using the module
 
