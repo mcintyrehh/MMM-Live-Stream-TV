@@ -5,7 +5,11 @@ MagicMirror² Module (MMM) for displaying HLS live feeds on your mirror
 
 Now with Arduino powered channel changing! Clone this repo today and get two arduino sketches for changing the channel with either a potentiometer OR a 10 switch rotary encoder!
 
-![Example Screenshot](./Screenshots/Screenshot.png)
+![Example Gif](./Screenshots/SlideshowLoop.gif)
+Example of the Slideshow function, set to 6 second channel changes 
+
+**these feeds are from EarthCam.com and ONLY to be used for personal art projects like the Magic Mirror*
+
 ## Installation
 
 In your terminal, go to your MagicMirror's Module folder:
