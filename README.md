@@ -33,7 +33,7 @@ modules: [
         style: "tv",  // Options: tv, slideshow, static
         sensors: [
           {
-            name: "PTNM",
+            name: "Potentiometer",
             description: "Potentiometer Value",
           }
         ]
@@ -61,6 +61,26 @@ The serial port should be '/dev/ttyACM0', but it could have a different name.  I
 
 ### Schematic Diagram/Hardware Connection
 
-![Schematic Diagram/Hardware Connection Image](./Screenshots/Schematics.png)
+![Schematic Diagram/Hardware Connection Image](./Screenshots/Schematics-Potentiometer.png)
 
-The LED is only there as an easy way to let you know the potentiometer is working
+The LED is only there as an easy way to let you know the potentiometer is working, just take out the resister/LED/data/power wire and comment out the astrix'd (`**`) lines in the arduino sketch
+
+```c++
+void loop() {
+  // value of the potentiometer from 0->1023
+  adcValue = analogRead(A0);
+  // sets a new channel variable, we will use this to check to see if it is different than the current channel
+  // maps the value received from the potentiometer from 0->1023 to the 10 channels (could be 0, 9 but mapping to 10 gives a little more room for the last channel)
+  int newChannel = map(adcValue, 0, 1023, 0, 10);
+  // map analog value to the 0-255 range, works as PWM duty cycle of ledPin port
+  analogWrite(ledPin, map(adcValue, 0, 1023, 0, 255));  // **Comment out to remove LED
+  if (newChannel != currentChannel) {
+    // If the channel is indeed new, send the result to computer through serial (formatted for ArduinoPort)
+    Serial.print("[sensor:Potentiometer:");
+    Serial.print(map(adcValue, 0, 1023, 0, 10));
+    Serial.println("]");
+    currentChannel = newChannel;   // saves the new channel state
+  };
+}
+```
+The name in `Serial.print("[sensor:Potentiometer:");` needs to be the same as in your config "Sensors" name
