@@ -20,6 +20,12 @@ module.exports = NodeHelper.create({
 	start: function() {
 		console.log(this.consolePrefix + "Starting node_helper for module [" + this.name + "]");
 		this.initialized = false;
+		// setting an autoplaying boolean so the first channel is left alone on the first run through
+		this.autoplaying = false;
+		// setting a blank interval for later
+		this.interval = null;
+		// setting the current channel
+		this.currentSlideshowChannel = null;
 	},
 
 	python_start: function () {
@@ -50,7 +56,7 @@ module.exports = NodeHelper.create({
 	},
 
 	sendData: function(message){
-		    const self = this;
+		const self = this;
 		var value;
 		for(var i in this.config.sensors){
 			value = null;
@@ -64,16 +70,41 @@ module.exports = NodeHelper.create({
 		}
 		self.sendSocketNotification("sensor", this.config.sensors);
 	},
-
+	changeChannel: function() {
+		const self = this;
+		if (!self.autoplaying) {
+			//this allows the first run-through to leave the channel alone so it doesn't skip from the start channel immedietely
+			self.autoplaying = true;
+		} else {
+			// if its reached the last channel set it back to 0 and update DOM
+			if (this.currentSlideshowChannel >= 9) {
+				self.currentSlideshowChannel = 0;
+				console.log(this.currentSlideshowChannel);
+				this.sendSocketNotification("slideshow", this.currentSlideshowChannel);
+			}
+			//otherwise change the channel up one
+			else {
+				this.currentSlideshowChannel++;
+				this.sendSocketNotification("slideshow", this.currentSlideshowChannel);
+			}
+		}
+	},
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
 
 		if (notification === "CONFIG") {
-			      this.config = payload;
-		    } else if (notification === "INITIALIZE" && this.config !== null){
+			this.config = payload;
+			this.currentSlideshowChannel = this.config.currentChannel;
+		}
+		else if (notification === "INITIALIZE" && this.config !== null){
 			this.python_start();
 			self.sendSocketNotification("status", {action: "status", name: "initialized"});
 			this.initialized = true;
-		    }
+		}
+		else if (notification === "SLIDESHOW" && this.config !== null) {
+			console.log("*************************")
+			// console.log(this.currentChannel);
+			this.interval = setInterval((self.changeChannel).bind(this), this.config.slideshowInterval);
+		}
 	}
 });

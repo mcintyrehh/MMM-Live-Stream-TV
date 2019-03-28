@@ -6,15 +6,16 @@ Module.register("MMM-Live-Stream-TV",{
 		style: "tv",
 		updateInterval: 1, //second
 		animationSpeed: 1000,
+		slideshowInterval: 10*1000,
 		displayIcons: true,
 		useColors: false,
+		autoplaying: false,
 		iconSize: "small",
 		labelSize: "medium",
 		showDescription: false,
 		developerMode: false,
 		frameWidth: "600",
 		maxWidth: "100%",
-		url: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w2084964165.m3u8",
 		scrolling: "no",
 		currentChannel: 0,
 		sensor: {
@@ -80,8 +81,11 @@ Module.register("MMM-Live-Stream-TV",{
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
 		// initializing hls variable to be referenced when creating/destroying streams
-		if(this.config.style === "tv") {
-			this.hls = "";
+		this.hls = "";
+		// setting a blank interval
+		this.interval = null;
+		switch(this.config.style) {
+		case  "tv":
 			// initializing status booleans
 			this.loading = true;
 			this.isArduinoStarting = false;
@@ -95,9 +99,38 @@ Module.register("MMM-Live-Stream-TV",{
 			this.sendSocketNotification("INITIALIZE", null);
 			self.log(("[MMM-Live-Stream-TV::START()]: data: " + JSON.stringify(self.data, null, 4)), "dev");
 			self.log(("[MMM-Live-Stream-TV::START()]: config: " + JSON.stringify(self.config, null, 4)), "dev");
+			break;
+		case "slideshow":
+			this.sendSocketNotification("CONFIG", this.config);
+			console.log("in slideshow");
+			this.sendSocketNotification("SLIDESHOW", null);
 		}
-
 	},
+	// slideshow: function() {
+	// 	var numStreams = this.config.streams.length;
+	// 	const self = this;
+	// 	this.interval = setInterval((function() {self.changeChannel()}).bind(this), self.config.slideshowInterval);
+	// },
+	// changeChannel: function(streams) {
+	// 	const self = this;
+	// 	// if its reached the last channel set it back to 0 and update DOM
+	// 	if (this.config.currentChannel === (9)) {
+	// 		this.config.currentChannel == 0;
+	// 		console.log(this.config.currentChannel);
+	// 		self.updateDom(this.config.updateInterval);
+	// 		return;
+	// 	}
+	// 	//otherwise change the channel up one
+	// 	else {
+	// 		if(this.config.autoplaying) {
+	// 			self.updateDom(this.config.updateInterval);
+	// 			self.config.autoplaying == true;
+	// 		}
+	// 		this.config.currentChannel++;
+	// 		console.log(self.config.currentChannel);
+	// 		return;
+	// 	}
+	// },
 	getTranslations: function() {
 		return {
 			en: "translations/en.json"
@@ -151,6 +184,9 @@ Module.register("MMM-Live-Stream-TV",{
 			if(payload.name == "initialized"){
 				this.loading = false;
 			}
+			if(payload.name == "nextFeed") {
+
+			}
 			// self.updateDom(self.config.animationSpeed);
 			break;
 
@@ -171,7 +207,14 @@ Module.register("MMM-Live-Stream-TV",{
 				this.updateDom(self.config.animationSpeed);
 			}
 			break;
-
+		case "slideshow":
+			console.log(`${this.name}: Slideshow Update: ${notification}`)
+			console.log(payload);
+			var newChannel = parseInt(payload);
+			Log.log(newChannel + " NEW CHANNEL");
+			// sets current channel to the value that the Arduino Serial is sending out
+			this.config.currentChannel = newChannel;
+			this.updateDom(self.config.animationSpeed);
 		case "error":
 			console.log("[socketNotificationReceived::error]:");
 
@@ -220,6 +263,7 @@ Module.register("MMM-Live-Stream-TV",{
 			});
 		}
 		video.play();
+
 		return wrapper;
 	},
 	log: function(message, type) {
