@@ -21,6 +21,12 @@ Clone this repository:
 ```bash
 git clone https://github.com/mcintyrehh/MMM-Live-Stream-TV.git
 ```
+
+Install the `python-shell` library:
+```bash
+npm install
+```
+
 Configure the module in your config.js file.
 
 ## Using the module
@@ -48,11 +54,14 @@ modules: [
 
 ## Configuration Options
 
-Option|Description
-------|-----------
-`portname`|The name/location of the port your Arduino is connected to<br/>**Expected Value type:** `Windows will be COM#, RasPi will be something like /dev/ttyACM#`
-`style`|Which display method you want<br/>**Expected Value type:** `"tv", "slideshow", "static"`
-
+Option|Description|Value|Default
+------|-----------|-----|-------
+`style`|**REQUIRED**</br> Which display method you want<br/>**Options:** `"tv", "slideshow", "static"`|string|`"slideshow"`
+`frameWidth`|Width of the video frame, in pixels|number|`600`
+`slideshowInterval`|Interval before switching to the next live feed|number|`15*60*1000 // 15 minutes`
+`portname`|*REQUIRED for `tv`* The name/location of the port your Arduino is connected to <br/>**Options:** `Windows will be COM#, RasPi will be something like /dev/ttyACM0`|string|`"/dev/ttyACM0"`|
+`sensors`|*REQUIRED for `tv`* Array of sensors from your Arduino sketch, right now its only for the potentiometer, but this allows for expansion down the road <br/> **Example: ** <code> sensors: [{name: "Potentiometer"}]</code> |array|`[{name: "Potentiometer"}]`
+  
 ## Setting up the Arduino
 
 Plug in your arduino and figure out what port it is connected to with the following command:
@@ -88,3 +97,28 @@ void loop() {
 }
 ```
 The name in `Serial.print("[sensor:Potentiometer:");` needs to be the same as in your config "Sensors" name
+
+## Special Thanks
+
+
+- [Furkan 'Dentrax' Türkal](https://github.com/Dentrax/MMM-ArduPort) for the amazing inspiration and Arduino->JS python scripts, without which this project would not have been possible!
+
+## License
+
+### The MIT License (MIT)
+
+Copyright © 2019 Henry McIntyre
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the “Software”), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+**The software is provided “as is”, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.**
