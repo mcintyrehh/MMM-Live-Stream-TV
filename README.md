@@ -56,11 +56,11 @@ modules: [
 
 Option|Description|Value|Default
 ------|-----------|-----|-------
-`style`|**REQUIRED**</br> Which display method you want<br/>**Options:** `"tv", "slideshow", "static"`|string|`slideshow`
+`style`|**REQUIRED**</br> Which display method you want<br/>**Options:** `"tv", "slideshow", "static"`|string|`"slideshow"`
 `frameWidth`|Width of the video frame, in pixels|number|`600`
-`slideshowInterval`|Interval before switching to the next live feed|number|`15 * 60 * 1000 // 15 minutes`
-`portname`|*REQUIRED for `tv`* The name/location of the port your Arduino is connected to|**Options:** `Windows will be COM#, RasPi will be something like /dev/ttyACM0`|string|`/dev/ttyACM0`
-`sensors`|*REQUIRED for `tv`* Array of sensors from your Arduino sketch, right now its only for the potentiometer, but this allows for expansion down the road <br/> **Example: ** <code> sensors: [{name: "Potentiometer"}]</code> |array|
+`slideshowInterval`|Interval before switching to the next live feed|number|`15*60*1000 // 15 minutes`
+`portname`|*REQUIRED for `tv`* The name/location of the port your Arduino is connected to <br/>**Options:** `Windows will be COM#, RasPi will be something like /dev/ttyACM0`|string|`"/dev/ttyACM0"`|
+`sensors`|*REQUIRED for `tv`* Array of sensors from your Arduino sketch, right now its only for the potentiometer, but this allows for expansion down the road <br/> **Example: ** <code> sensors: [{name: "Potentiometer"}]</code> |array|`[{name: "Potentiometer"}]`
   
 ## Setting up the Arduino
 
