@@ -60,6 +60,7 @@ module.exports = NodeHelper.create({
 		var value;
 		for(var i in this.config.sensors){
 			value = null;
+			console.log(this.config.sensors)
 			var sensor = this.config.sensors.find(x => x.name === message.sensor.name);
 			if(sensor){
 				value = message.sensor.data;

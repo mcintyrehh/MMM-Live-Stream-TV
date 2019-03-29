@@ -2,26 +2,20 @@ Module.register("MMM-Live-Stream-TV",{
 	logPrefix: "[MMM-Live-Stream-TV]:: ",
 
 	defaults: {
-		portname: "COM7",
-		style: "tv",
-		updateInterval: 1, //second
+		portname: "/dev/ttyACM0",		//COMX for windows, /dev/tty* for raspberry pi
+		style: "slideshow",
 		animationSpeed: 1000,
-		slideshowInterval: 10*1000,
-		displayIcons: true,
-		useColors: false,
+		slideshowInterval: 15*60*1000,	//15 mins
 		autoplaying: false,
-		iconSize: "small",
-		labelSize: "medium",
-		showDescription: false,
 		developerMode: false,
 		frameWidth: "600",
 		maxWidth: "100%",
-		scrolling: "no",
 		currentChannel: 0,
-		sensor: {
-			description: null,
-			error: null,
-		},
+		sensors: [
+			{
+				name: "Potentiometer",
+			}
+		],
 		streams: [
 
 			{
@@ -106,31 +100,6 @@ Module.register("MMM-Live-Stream-TV",{
 			this.sendSocketNotification("SLIDESHOW", null);
 		}
 	},
-	// slideshow: function() {
-	// 	var numStreams = this.config.streams.length;
-	// 	const self = this;
-	// 	this.interval = setInterval((function() {self.changeChannel()}).bind(this), self.config.slideshowInterval);
-	// },
-	// changeChannel: function(streams) {
-	// 	const self = this;
-	// 	// if its reached the last channel set it back to 0 and update DOM
-	// 	if (this.config.currentChannel === (9)) {
-	// 		this.config.currentChannel == 0;
-	// 		console.log(this.config.currentChannel);
-	// 		self.updateDom(this.config.updateInterval);
-	// 		return;
-	// 	}
-	// 	//otherwise change the channel up one
-	// 	else {
-	// 		if(this.config.autoplaying) {
-	// 			self.updateDom(this.config.updateInterval);
-	// 			self.config.autoplaying == true;
-	// 		}
-	// 		this.config.currentChannel++;
-	// 		console.log(self.config.currentChannel);
-	// 		return;
-	// 	}
-	// },
 	getTranslations: function() {
 		return {
 			en: "translations/en.json"
@@ -138,7 +107,6 @@ Module.register("MMM-Live-Stream-TV",{
 	},
 	getStyles: function() {
 		return [
-			"https://use.fontawesome.com/releases/v5.6.3/css/all.css",
 			"MMM-Live-Stream-TV.css"
 		];
 	},
@@ -233,7 +201,6 @@ Module.register("MMM-Live-Stream-TV",{
 			this.hls.destroy();
 		};
 		var wrapper = document.createElement("div");
-		var { width, height } = this.config;
 		var video = document.createElement("video");
 		wrapper.appendChild(video);
 		// creating info divs below the video
