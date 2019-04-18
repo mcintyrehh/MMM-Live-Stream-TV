@@ -28,17 +28,14 @@ void setup() {
 
 void loop() {
   // value of the potentiometer from 0->1023
-  adcValue = analogRead(A0);
-  // sets a new channel variable, we will use this to check to see if it is different than the current channel
-  // maps the value received from the potentiometer from 0->1023 to the 10 channels (could be 0, 9 but mapping to 10 gives a little more room for the last channel)
-  int newChannel = map(adcValue, 0, 1023, 0, 10);
-  // map analog to the 0-255 range, and works as PWM duty cycle of ledPin port
-  analogWrite(ledPin, map(adcValue, 0, 1023, 0, 255));  // **Comment out to remove LED
-  if (newChannel != currentChannel) {
-    // If the channel is indeed new, send the result to computer through serial (formatted for ArduinoPort)
+  adcValue = analogRead(A0);                            // sets a new channel variable, we will use this to check to see if it is different than the current channel
+  int newChannel = map(adcValue, 0, 1023, 0, 10);       // maps the value received from the potentiometer from 0->1023 to the 10 channels (could be 0, 9 but mapping to 10 gives a little more room for the last channel)
+  analogWrite(ledPin, map(adcValue, 0, 1023, 0, 255));  // **Comment out to remove LED // map analog to the 0-255 range, and works as PWM duty cycle of ledPin port
+  if (newChannel != currentChannel) {                   // If the channel is indeed new, send the result to computer through serial (formatted for ArduinoPort)
     Serial.print("[sensor:Potentiometer:");
-    Serial.print(map(adcValue, 0, 1023, 0, 10));
+    Serial.print(newChannel);
     Serial.println("]");
-    currentChannel = newChannel;   // saves the new channel state
+    currentChannel = newChannel;   // saves the new channel statelol 
   };
+  delay(500);
 }
