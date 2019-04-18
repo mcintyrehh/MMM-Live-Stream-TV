@@ -1,5 +1,5 @@
 # MMM-Live-Stream-TV
-MagicMirror² Module (MMM) for displaying HLS live feeds on your mirror
+A [MagicMirror²](https://github.com/MichMich/MagicMirror) Module (MMM) for displaying HLS live feeds on your mirror
 
 ...BUT WAIT!! Theres more!
 
