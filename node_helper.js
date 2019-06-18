@@ -64,6 +64,7 @@ module.exports = NodeHelper.create({
 			var sensor = this.config.sensors.find(x => x.name === message.sensor.name);
 			if(sensor){
 				value = message.sensor.data;
+				console.log(message.sensor.data);
 			} else {
 				console.error(self.consolePrefix + "Error: Incoming Sensor " + this.config.sensors[i].name + " not configured in config.js!");
 			}
@@ -106,6 +107,9 @@ module.exports = NodeHelper.create({
 			console.log("*************************")
 			// console.log(this.currentChannel);
 			this.interval = setInterval((self.changeChannel).bind(this), this.config.slideshowInterval);
+		}
+		else if (notification === "STATIC" && this.config !== null) {
+			self.sendSocketNotification("static", this.currentChannel);
 		}
 	}
 });

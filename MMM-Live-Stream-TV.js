@@ -2,8 +2,8 @@ Module.register("MMM-Live-Stream-TV",{
 	logPrefix: "[MMM-Live-Stream-TV]:: ",
 
 	defaults: {
-		portname: "/dev/ttyACM0",		//COMX for windows, /dev/tty* for raspberry pi
-		style: "slideshow",
+		portname: "/dev/ttyACM0",		//COMX for windows, /dev/ttyACM0* for raspberry pi
+		style: "tv",
 		animationSpeed: 1000,
 		slideshowInterval: 15*60*1000,	//15 mins
 		autoplaying: false,
@@ -16,10 +16,72 @@ Module.register("MMM-Live-Stream-TV",{
 				name: "Potentiometer",
 			}
 		],
+		streams: [
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w602250694.m3u8?t=R3bNUFQw1fOgbBpNsGnoJBEeDuIAjbC88j%2FJbJzKBSQ%3D",
+				url: "https://www.esbnyc.com/earthcam-empire-state-building",
+				name: "Empire State Building",
+				channelNumber: 0,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w602250694.m3u8?t=R3bNUFQw1fOgbBpNsGnoJBEeDuIAjbC88j%2FJbJzKBSQ%3D",
+				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
+				name: "ESB View (South)",
+				channelNumber: 1,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/10874.flv/chunklist_w1857702709.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/worldtradecenter/?cam=skyline_g",
+				name: "World Trade Center",
+				channelNumber: 2,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/chargingbull.flv/chunklist_w1863819991.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/wallstreet/chargingbull/?cam=chargingbull_hd",
+				name: "Wall Street Bull",
+				channelNumber: 3,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w297656544.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsrobo1",
+				name: "Times Square",
+				channelNumber: 4,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/4017timessquare.flv/chunklist_w32227322.m3u8",
+				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tstwo_hd",
+				name: "Times Square View (South)",
+				channelNumber: 5,
+			},
+			{
+				streamUrl: "https://video2archives.earthcam.com/archives/_definst_/MP4:permanent/485/2018/09/25/1300.mp4/chunklist_w1437253022.m3u8",
+				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsnorth_hd",
+				name: "Times Square View (North)",
+				channelNumber: 6,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w1145885185.m3u8",
+				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsstreet",
+				name: "Times Square Street Cam",
+				channelNumber: 7,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/15559.flv/chunklist_w1012258859.m3u8",
+				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsrobo3",
+				name: "Times Square Crossroads",
+				channelNumber: 8,
+			},
+			{
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13903.flv/chunklist_w2058776447.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
+				name: "Midtown Skyline",
+				channelNumber: 9,
+			}
+	   ]
 
 	},
 	start: function() {
-		console.log("in plantrr");
+		console.log("in MMM-Live-Stream-TV");
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
 		// initializing hls variable to be referenced when creating/destroying streams
@@ -46,6 +108,8 @@ Module.register("MMM-Live-Stream-TV",{
 			this.sendSocketNotification("CONFIG", this.config);
 			console.log("in slideshow");
 			this.sendSocketNotification("SLIDESHOW", null);
+		case "static":
+			this.sendSocketNotification("STATIC", null);
 		}
 	},
 	getTranslations: function() {
@@ -165,7 +229,8 @@ Module.register("MMM-Live-Stream-TV",{
 		if (Hls.isSupported()) {
 			var hls = new Hls();
 			this.hls = hls;
-			hls.loadSource(this.config.streams[this.config.currentChannel].url);
+			hls.loadSource(this.config.streams[this.config.currentChannel].streamUrl);
+			console.log(this.config.streams[this.config.currentChannel].streamUrl)
 			hls.attachMedia(video);
 			hls.on(Hls.Events.MANIFEST_PARSED,function() {
 				video.play();
