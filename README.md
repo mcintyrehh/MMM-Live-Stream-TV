@@ -8,6 +8,11 @@ Now with Arduino powered channel changing! Clone this repo today and get two ard
 ![Example Gif](./Screenshots/SlideshowLoop.gif)
 Example of the Slideshow function, set to 6 second channel changes 
 
+
+![Example Gif - tv functionality](./Screenshots/tv-function.gif)
+
+Example of the TV functionality with 10 switch rotary encoder!)
+
 **these feeds are from EarthCam.com and ONLY to be used for personal art projects like the Magic Mirror*
 
 ## Installation
