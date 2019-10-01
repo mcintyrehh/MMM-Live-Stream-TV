@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 const axios = require("axios");
-const $ = require("cheerio");
 
 axios.get("https://www.earthcam.com/usa/newyork/brooklynbridge/?cam=gzcchd")
     .then(response => {
@@ -12,6 +11,12 @@ axios.get("https://www.earthcam.com/usa/newyork/brooklynbridge/?cam=gzcchd")
       const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
       const parsedJSON = JSON.parse(slicedJSON)
       console.log(parsedJSON)
+      const camName = Object.keys(parsedJSON.cam)[0]
+      console.log(camName);
+      console.log(parsedJSON.cam[camName].html5_streamingdomain)
+      const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
+
+      console.log(liveStreamURL);
     })
 
 // https://videos3.earthcam.com/fecnetwork/3983.flv/chunklist_w1167321633.m3u8
