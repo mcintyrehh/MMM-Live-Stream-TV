@@ -242,6 +242,7 @@ Module.register("MMM-Live-Stream-TV",{
 				video.play();
 			});
 		}
+		// Do I need to take this out? the if/if else statements above both end with video.play()
 		video.play();
 
 		return wrapper;
