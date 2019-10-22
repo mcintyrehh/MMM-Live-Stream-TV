@@ -1,3 +1,4 @@
+
 Module.register("MMM-Live-Stream-TV",{
 	logPrefix: "[MMM-Live-Stream-TV]:: ",
 
@@ -18,61 +19,61 @@ Module.register("MMM-Live-Stream-TV",{
 		],
 		streams: [
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w602250694.m3u8?t=R3bNUFQw1fOgbBpNsGnoJBEeDuIAjbC88j%2FJbJzKBSQ%3D",
-				url: "https://www.esbnyc.com/earthcam-empire-state-building",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w602250694.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
 				name: "Empire State Building",
 				channelNumber: 0,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w602250694.m3u8?t=R3bNUFQw1fOgbBpNsGnoJBEeDuIAjbC88j%2FJbJzKBSQ%3D",
-				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/playlist.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/brooklynbridge/?cam=gzcchd",
 				name: "ESB View (South)",
 				channelNumber: 1,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/10874.flv/chunklist_w1857702709.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/10874.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/worldtradecenter/?cam=skyline_g",
 				name: "World Trade Center",
 				channelNumber: 2,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/chargingbull.flv/chunklist_w1863819991.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/chargingbull.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/wallstreet/chargingbull/?cam=chargingbull_hd",
 				name: "Wall Street Bull",
 				channelNumber: 3,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/hdtimes10.flv/chunklist_w297656544.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/hdtimes10.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/timessquare/?cam=tsrobo1",
 				name: "Times Square",
 				channelNumber: 4,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/4017timessquare.flv/chunklist_w32227322.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/4017timessquare.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tstwo_hd",
 				name: "Times Square View (South)",
 				channelNumber: 5,
 			},
 			{
-				streamUrl: "https://video2archives.earthcam.com/archives/_definst_/MP4:permanent/485/2018/09/25/1300.mp4/chunklist_w1437253022.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/hdtimes10.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsnorth_hd",
 				name: "Times Square View (North)",
 				channelNumber: 6,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/9974.flv/chunklist_w1145885185.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/9974.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsstreet",
 				name: "Times Square Street Cam",
 				channelNumber: 7,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/15559.flv/chunklist_w1012258859.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/15559.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsrobo3",
 				name: "Times Square Crossroads",
 				channelNumber: 8,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/13903.flv/chunklist_w2058776447.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13903.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
 				name: "Midtown Skyline",
 				channelNumber: 9,
@@ -84,6 +85,20 @@ Module.register("MMM-Live-Stream-TV",{
 		console.log("in MMM-Live-Stream-TV");
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
+		// mapping through streams to create most recent live stream url
+		this.config.streams.map((stream) => {
+			axios.get(stream.url)
+				.then(response => {
+					const startJSON = response.data.indexOf("{\"cam\"")
+					const endJSON = response.data.indexOf("\"related_cams\":") -2
+					const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
+					const parsedJSON = JSON.parse(slicedJSON)
+					const camName = Object.keys(parsedJSON.cam)[0]
+					const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
+					stream.streamURL = liveStreamURL;
+				})
+		})
+		console.log(this.config.streams);
 		// initializing hls variable to be referenced when creating/destroying streams
 		this.hls = "";
 		// setting a blank interval
