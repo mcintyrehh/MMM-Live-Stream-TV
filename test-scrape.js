@@ -1,9 +1,10 @@
 /* eslint-disable indent */
 const axios = require("axios");
 
-axios.get("https://www.earthcam.com/usa/newyork/brooklynbridge/?cam=gzcchd")
+axios.get("https://www.earthcam.com/cams/newyork/timessquare/?cam=tsnorth_hd")
     .then(response => {
       console.log(typeof response.data)
+      // console.log(response.data);
       const startJSON = response.data.indexOf("{\"cam\"")
       const endJSON = response.data.indexOf("\"related_cams\":") -2
       console.log(`startJSON: ${startJSON}`);
