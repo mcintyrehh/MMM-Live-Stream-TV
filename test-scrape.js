@@ -6,7 +6,7 @@ axios.get("https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k")
       console.log(typeof response.data)
       // console.log(response.data);
       const startJSON = response.data.indexOf("{\"cam\"")
-      const endJSON = response.data.indexOf("\"related_cams\":") -2
+      const endJSON = response.data.indexOf("\"related_cams\":") -2stat
       console.log(`startJSON: ${startJSON}`);
       console.log(`endJSON: ${endJSON}`);
       const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
@@ -16,7 +16,6 @@ axios.get("https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k")
       console.log(camName);
       console.log(parsedJSON.cam[camName].html5_streamingdomain)
       const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
-
       console.log(liveStreamURL);
     })
 
