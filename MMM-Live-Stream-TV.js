@@ -86,18 +86,18 @@ Module.register("MMM-Live-Stream-TV",{
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
 		// mapping through streams to create most recent live stream url
-		// this.config.streams.map((stream) => {
-		// 	axios.get(stream.url)
-		// 		.then(response => {
-		// 			const startJSON = response.data.indexOf("{\"cam\"")
-		// 			const endJSON = response.data.indexOf("\"related_cams\":") -2
-		// 			const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
-		// 			const parsedJSON = JSON.parse(slicedJSON)
-		// 			const camName = Object.keys(parsedJSON.cam)[0]
-		// 			const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
-		// 			stream.streamURL = liveStreamURL;
-		// 		})
-		// })
+		this.config.streams.map((stream) => {
+			axios.get(stream.url)
+				.then(response => {
+					const startJSON = response.data.indexOf("{\"cam\"")
+					const endJSON = response.data.indexOf("\"related_cams\":") -2
+					const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
+					const parsedJSON = JSON.parse(slicedJSON)
+					const camName = Object.keys(parsedJSON.cam)[0]
+					const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
+					stream.streamURL = liveStreamURL;
+				})
+		})
 		console.log(this.config.streams);
 		// initializing hls variable to be referenced when creating/destroying streams
 		this.hls = "";
