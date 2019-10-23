@@ -11,7 +11,7 @@ Module.register("MMM-Live-Stream-TV",{
 		developerMode: false,
 		frameWidth: "600",
 		maxWidth: "100%",
-		currentChannel: 0,
+		currentChannel: 9,
 		sensors: [
 			{
 				name: "Potentiometer",
@@ -19,7 +19,7 @@ Module.register("MMM-Live-Stream-TV",{
 		],
 		streams: [
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/chunklist_w602250694.m3u8",
+				streamUrl: "www.videos3.earthcam.com/fecnetwork/5321.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
 				name: "Empire State Building",
 				channelNumber: 0,
@@ -55,7 +55,7 @@ Module.register("MMM-Live-Stream-TV",{
 				channelNumber: 5,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/hdtimes10.flv/playlist.m3u8",
+				streamUrl: "http://videos3.earthcam.com/fecnetwork/hdtimes10.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/cams/newyork/timessquare/?cam=tsnorth_hd",
 				name: "Times Square View (North)",
 				channelNumber: 6,
@@ -86,18 +86,18 @@ Module.register("MMM-Live-Stream-TV",{
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
 		// mapping through streams to create most recent live stream url
-		this.config.streams.map((stream) => {
-			axios.get(stream.url)
-				.then(response => {
-					const startJSON = response.data.indexOf("{\"cam\"")
-					const endJSON = response.data.indexOf("\"related_cams\":") -2
-					const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
-					const parsedJSON = JSON.parse(slicedJSON)
-					const camName = Object.keys(parsedJSON.cam)[0]
-					const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
-					stream.streamURL = liveStreamURL;
-				})
-		})
+		// this.config.streams.map((stream) => {
+		// 	axios.get(stream.url)
+		// 		.then(response => {
+		// 			const startJSON = response.data.indexOf("{\"cam\"")
+		// 			const endJSON = response.data.indexOf("\"related_cams\":") -2
+		// 			const slicedJSON = response.data.slice(startJSON, endJSON).concat("}");
+		// 			const parsedJSON = JSON.parse(slicedJSON)
+		// 			const camName = Object.keys(parsedJSON.cam)[0]
+		// 			const liveStreamURL = parsedJSON.cam[camName].html5_streamingdomain + parsedJSON.cam[camName].html5_streampath
+		// 			stream.streamURL = liveStreamURL;
+		// 		})
+		// })
 		console.log(this.config.streams);
 		// initializing hls variable to be referenced when creating/destroying streams
 		this.hls = "";
@@ -139,8 +139,8 @@ Module.register("MMM-Live-Stream-TV",{
 	},
 	// Define required scripts.
 	getScripts: function() {
-		// this loads the hls js file
-		return ["https://cdn.jsdelivr.net/npm/hls.js"];
+		// this loads the hls js file, and axios
+		return ["https://cdn.jsdelivr.net/npm/hls.js", "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"];
 	},
 	socketNotificationReceived: function(notification, payload) {
 		const self = this;

@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 const axios = require("axios");
 
-axios.get("https://www.earthcam.com/cams/newyork/timessquare/?cam=tsnorth_hd")
+axios.get("https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k")
     .then(response => {
       console.log(typeof response.data)
       // console.log(response.data);
