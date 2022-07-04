@@ -21,6 +21,7 @@
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.3",
     "hls.js": "^0.12.4",
-    "python-shell": "^1.0.7"
+    "python-shell": "^1.0.7",
+    "request": "^2.88.2"
   }
 }
