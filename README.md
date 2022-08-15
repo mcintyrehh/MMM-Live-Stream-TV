@@ -17,10 +17,10 @@ Example of the TV functionality with 10 switch rotary encoder!)
 
 ## Installation
 
-In your terminal, go to your MagicMirror's Module folder:
+In your terminal, from the root of the MagicMirror project:
 
 ```bash
-cd ~/MagicMirror/modules
+cd modules
 ```
 Clone this repository:
 ```bash
@@ -29,6 +29,7 @@ git clone https://github.com/mcintyrehh/MMM-Live-Stream-TV.git
 
 Install the `python-shell` library:
 ```bash
+cd MMM-Live-Stream-TV
 npm install
 ```
 
