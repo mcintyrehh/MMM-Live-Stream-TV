@@ -1,26 +1,27 @@
 {
-  "name": "plantrr",
-  "version": "1.0.0",
+  "name": "mmm-live-stream-tv",
+  "version": "1.1.0",
   "description": "HLS live streams for Magic Mirror^2",
-  "main": "plantrr.js",
+  "main": "MMM-Live-Stream-TV.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcintyrehh/plantrr.git"
+    "url": "git+https://github.com/mcintyrehh/MMM-Live-Stream-TV"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mcintyrehh/plantrr/issues"
+    "url": "https://github.com/mcintyrehh/MMM-Live-Stream-TV/issues"
   },
-  "homepage": "https://github.com/mcintyrehh/plantrr#readme",
+  "homepage": "https://github.com/mcintyrehh/MMM-Live-Stream-TV#readme",
   "dependencies": {
+    "@warren-bank/hls-proxy": "^0.19.0",
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.3",
     "hls.js": "^0.12.4",
     "python-shell": "^1.0.7",
-    "streamlink": "^1.0.4"
+    "request": "^2.88.2"
   }
 }

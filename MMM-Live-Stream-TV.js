@@ -11,7 +11,7 @@ Module.register("MMM-Live-Stream-TV", {
 		developerMode: false,
 		frameWidth: "600",
 		maxWidth: "100%",
-		currentChannel: 9,
+		currentChannel: 0,
 		sensors: [
 			{
 				name: "Potentiometer",
@@ -19,7 +19,7 @@ Module.register("MMM-Live-Stream-TV", {
 		],
 		streams: [
 			{
-				streamUrl: "www.videos3.earthcam.com/fecnetwork/5321.flv/playlist.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/13903.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
 				name: "Empire State Building",
 				channelNumber: 0,
@@ -77,17 +77,23 @@ Module.register("MMM-Live-Stream-TV", {
 				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
 				name: "Midtown Skyline",
 				channelNumber: 9,
+			},
+			{
+				streamUrl: "https://videos-3.earthcam.com/fecnetwork/4089.flv/playlist.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
+				name: "Statue of Liberty",
+				channelNumber: 10,
 			}
 		]
 
 	},
 	start: function () {
-		console.log("in MMM-Live-Stream-TV");
 		Log.info(`Starting module: ${this.name}`);
 		const self = this;
+
 		// mapping through streams to create most recent live stream url
 		this.config.streams.map((stream) => {
-			axios.get(stream.url)
+			axios.get(stream.url, config)
 				.then(response => {
 					const startJSON = response.data.indexOf("{\"cam\"")
 					const endJSON = response.data.indexOf("\"related_cams\":") - 2
@@ -241,24 +247,36 @@ Module.register("MMM-Live-Stream-TV", {
 		videoInfo.appendChild(videoName);
 		wrapper.appendChild(videoInfo);
 		video.width = this.config.frameWidth;
+
 		if (Hls.isSupported()) {
-			var hls = new Hls();
+			const currentChannel = this.config.streams[this.config.currentChannel].streamUrl
+
+			const hls = new Hls(config);
 			this.hls = hls;
-			hls.loadSource(this.config.streams[this.config.currentChannel].streamUrl);
-			console.log(this.config.streams[this.config.currentChannel].streamUrl)
+			//bind video element to HLS object
 			hls.attachMedia(video);
-			hls.on(Hls.Events.MANIFEST_PARSED, function () {
-				video.play();
+			// MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
+			hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+				console.log("video and hls.js are now bound together!");
+
+
+				const proxy_url = 'http://127.0.0.1:8181';
+				const video_url = currentChannel;
+				const referer_url = 'https://www.earthcam.com/';
+				const file_extension = '.m3u8';
+
+				const hls_proxy_url = `${proxy_url}/${btoa(`${video_url}|${referer_url}`)}${file_extension}`
+
+				hls.loadSource(hls_proxy_url);
+				hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+					console.log(`manifest loaded, found ${data.levels.length} quality level`)
+					video.play();
+				});
 			})
 		}
-		else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-			video.src = this.config.url;
-			video.addEventListener("loadedmetadata", function () {
-				video.play();
-			});
+		else {
+			console.log("HLS is not supported, failed to attach media");
 		}
-		// Do I need to take this out? the if/if else statements above both end with video.play()
-		video.play();
 
 		return wrapper;
 	},

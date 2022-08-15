@@ -9,15 +9,28 @@
 
 const NodeHelper = require("node_helper");
 
-const {PythonShell} = require("python-shell");
-
-var pythonStarted = false;
+const { PythonShell } = require("python-shell");
 
 module.exports = NodeHelper.create({
 
 	consolePrefix: "[MMM-Live-Stream-TV]:: ",
 
 	start: function() {
+		const {exec} = require('child_process');
+		// Spin up HLS proxy server to get around CORS/Origin, Referer HTTP request headers
+		exec('./modules/MMM-Live-Stream-TV/node_modules/@warren-bank/hls-proxy/hls-proxy/bin/hlsd.js --port "8181"', (error, stdout, stderr) => {
+			if (error) {
+				console.error(`node subprocess error.message: ${error.message}`);
+				console.error(`node subprocess error: ${error}`);
+				return;
+			}
+
+			if (stderr) {
+				console.error(`node subprocess stderr: ${stderr}`);
+				return;
+			}
+			console.log(`node subprocess stdout: ${stdout}`);
+		})
 		console.log(this.consolePrefix + "Starting node_helper for module [" + this.name + "]");
 		this.initialized = false;
 		// setting an autoplaying boolean so the first channel is left alone on the first run through

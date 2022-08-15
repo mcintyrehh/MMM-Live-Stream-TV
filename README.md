@@ -39,6 +39,8 @@ Configure the module in your config.js file.
 
 To use this module, add it to the modules array in your config.js file.
 
+Potentiometer example:
+
 ```js
 modules: [
    {
@@ -56,6 +58,28 @@ modules: [
       },
    }
 ]
+```
+
+Static channel example: 
+```js
+modules: [
+   {
+      module: 'MMM-Live-Stream-TV',
+      position: 'bottom_center',
+      config: {
+        style: "static",  // Options: tv, slideshow, static
+        streams: [
+          {
+            streamUrl: "https://videos3.earthcam.com/fecnetwork/13903.flv/playlist.m3u8",
+            url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
+            name: "Empire State Building",
+            channelNumber: 0,
+          },
+        ]
+      },
+   }
+]
+
 ```
 
 ## Configuration Options
