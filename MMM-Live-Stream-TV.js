@@ -19,15 +19,15 @@ Module.register("MMM-Live-Stream-TV", {
 		],
 		streams: [
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/13903.flv/playlist.m3u8",
-				url: "https://www.earthcam.com/usa/newyork/midtown/skyline/?cam=midtown4k",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/20489.flv/playlist.m3u8",
+				url: "https://www.earthcam.com/usa/newyork/empirestatebuilding/?cam=esb37",
 				name: "Empire State Building",
 				channelNumber: 0,
 			},
 			{
-				streamUrl: "https://videos3.earthcam.com/fecnetwork/13908.flv/playlist.m3u8",
+				streamUrl: "https://videos3.earthcam.com/fecnetwork/3983.flv/playlist.m3u8",
 				url: "https://www.earthcam.com/usa/newyork/brooklynbridge/?cam=gzcchd",
-				name: "ESB View (South)",
+				name: "Brooklyn Bridge",
 				channelNumber: 1,
 			},
 			{
@@ -192,7 +192,8 @@ Module.register("MMM-Live-Stream-TV", {
 				break;
 
 			case "sensor":
-				if (this.isArduinoConnected && this.isArduinoStarted) {
+				// if (this.isArduinoConnected && this.isArduinoStarted) {
+				if (this.isArduinoConnected) {
 					self.log("[socketNotificationReceived::sensor]: ");
 					self.log(JSON.stringify(payload, null, 4));
 
