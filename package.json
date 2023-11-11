@@ -18,7 +18,7 @@
   "homepage": "https://github.com/mcintyrehh/MMM-Live-Stream-TV#readme",
   "dependencies": {
     "@warren-bank/hls-proxy": "^0.19.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "cheerio": "^1.0.0-rc.3",
     "hls.js": "^0.12.4",
     "python-shell": "^1.0.7",
